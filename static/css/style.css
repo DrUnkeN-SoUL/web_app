@@ -589,27 +589,6 @@ a { text-decoration: none; }
     padding-top: 32px;
   }
 
-  .video-action-button {
-    width: 32px;
-    height: 32px;
-    background-size: 14px;
-    margin: 0 4px;
-  }
-
-  .video-action-button.endcall {
-    background-size: 14px;
-    font-size: 12px;
-    padding-left: 36px;
-  }
-
-  .video-action-button.magnifier svg {
-    width: 14px;
-  }
-
-  .video-action-button.magnifier span {
-    margin: 0 4px;
-    font-size: 12px;
-  }
 }
 
 @media screen and (max-width: 520px) and (max-height: 720px) {

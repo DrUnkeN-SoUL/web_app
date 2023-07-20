@@ -1,5 +1,7 @@
 from keras.models import model_from_json
 from flask import Flask, render_template, Response
+from collections import defaultdict
+
 import cv2
 import numpy as np
 
@@ -33,6 +35,7 @@ def capture_by_frames():
         detector = cv2.CascadeClassifier('Haarcascades/haarcascade_frontalface_default.xml')
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces = detector.detectMultiScale(gray_frame, scaleFactor=1.3, minNeighbors=5)
+        emotion_counts = defaultdict(int)
 
         # Processing obtained faces
         for (x, y, w, h) in faces:
@@ -41,13 +44,27 @@ def capture_by_frames():
             cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray_frame, (48, 48)), -1), 0)
 
             # predict the emotions
-            emotion_prediction = emotion_model.predict(cropped_img)
-            maxindex = int(np.argmax(emotion_prediction))
-            emotion = emotion_dict[maxindex]
-            confidence = float(emotion_prediction[0, maxindex]) * 100
-            conf = "{:.2f}".format(confidence)
-            text = emotion + " - " + conf
-            cv2.putText(frame, text, (x + 5, y - 20), cv2.FONT_HERSHEY_DUPLEX, 0.7, (255, 0, 0), 1, cv2.LINE_AA)
+            try:
+                emotion_prediction = emotion_model.predict(cropped_img)
+                maxindex = int(np.argmax(emotion_prediction))
+                emotion = emotion_dict[maxindex]
+                emotion_counts[emotion] += 1
+                confidence = float(emotion_prediction[0, maxindex]) * 100
+                conf = "{:.2f}".format(confidence)
+                text = emotion + " - " + conf
+                cv2.putText(frame, text, (x + 5, y - 20), cv2.FONT_HERSHEY_DUPLEX, 0.7, (255, 0, 0), 1, cv2.LINE_AA)
+
+            except:
+                print("no face found")
+
+        # Generate the emotion count dictionary
+        emotion_count_dict = {emotion: count for emotion, count in emotion_counts.items()}
+
+        text_bottom = "Emotion Counts: " + ", ".join(
+            [f"{emotion}: {count}" for emotion, count in emotion_count_dict.items()])
+        cv2.putText(frame, text_bottom, (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_PLAIN, 1,
+                    (255, 0, 0),
+                    2, cv2.LINE_AA)
 
         ret, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()
@@ -57,7 +74,7 @@ def capture_by_frames():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('test.html')
 
 
 @app.route('/start', methods=['POST'])
@@ -66,10 +83,10 @@ def start():
     global camera
 
     if not camera_started:
-        camera = cv2.VideoCapture(0)
+        camera = cv2.VideoCapture(1)
         camera_started = True
 
-    return render_template('index.html')
+    return render_template('test.html')
 
 
 @app.route('/stop', methods=['POST'])
@@ -81,7 +98,7 @@ def stop():
         camera.release()
     camera_started = False
 
-    return render_template('stop.html')
+    return render_template('test.html')
 
 
 @app.route('/video_capture')
