@@ -43,7 +43,7 @@ pip install -r requirements.txt
 
 ## Run the app:
 
-```python emotion_detection_app.py```
+```python app.py```
 
 ## How to Use
 Ensure your webcam is connected and working (if using the live webcam feed).
