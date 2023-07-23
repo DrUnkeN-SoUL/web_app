@@ -5,20 +5,20 @@ The Emotion Detection App is a real-time computer vision application that uses d
 The Emotion Detection App uses the power of OpenCV for image processing and face detection. It leverages a Haar Cascade classifier to identify human faces in each frame of the video feed. After detecting the faces, the app processes them to predict the associated emotion using a pre-trained deep learning model.
 
 ## Features
--Real-time emotion detection from live webcam feeds.
--Emotion recognition from video files.
--Accurate classification of emotions into seven categories: Angry, Disgusted, Fearful, Happy, Neutral, Sad, and Surprised.
--User-friendly interface to visualize the detected emotions.
+- Real-time emotion detection from live webcam feeds.
+- Emotion recognition from video files.
+- Accurate classification of emotions into seven categories: Angry, Disgusted, Fearful, Happy, Neutral, Sad, and Surprised.
+- User-friendly interface to visualize the detected emotions.
 
 
 ## Requirements
 To run the Emotion Detection App, you need the following dependencies:
 
--Python 3.x
--OpenCV
--NumPy
--Keras
-
+- Python 3.x
+- OpenCV
+- NumPy
+- Keras
+- Flask
 
 ## Installation
 Clone this repository to your local machine.
