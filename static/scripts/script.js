@@ -1,7 +1,8 @@
 $(document).ready(function () {
-  $('button.mode-switch').click(function () {
+  $('input.slider').click(function () {
+    // Toggle 'dark' class on the body element
     $('body').toggleClass('dark');
-  });
+});
 
   $(".btn-close-right").click(function () {
     $(".right-side").removeClass("show");
